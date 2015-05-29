@@ -1,11 +1,13 @@
 importFrom(S4Vectors, isSingleString)
 importFrom(httr, GET, content)
 importFrom(XML, xmlValue)
+importFrom(yaml, yaml.load)
 
 export(clean,
        cleanDataPkg,
        makeBins,
        emailExistingUser,
+       emailMtr,
        emailNewUser,
        requestNewSvnAccountFromScicomp,
        existingSvnUsers,
