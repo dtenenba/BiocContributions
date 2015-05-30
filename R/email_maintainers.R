@@ -93,6 +93,7 @@ failmail <- function(package, software=TRUE, from=getOption("fromEmail",
     msg <- paste0(msg, "Let me know if you have any questions.\n\nThanks,\n", sig, "\n")
     if (preview)
     {
+        cat ("Mesage preview:\n-------\n")
         cat(sprintf("From: %s\nTo: %s\nSubject: %s\n\n%s",
             from, to, subject, msg))
         cat("---\nIs this ok (y/N)? ")
