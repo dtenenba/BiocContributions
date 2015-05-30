@@ -56,6 +56,7 @@ failmail <- function(package, software=TRUE, from=getOption("fromEmail",
     subject=sprintf("%s build problem", package), preview=TRUE,
     bccme=TRUE)
 {
+    if (!require(sendmailR)) stop("This function requires the sendmailR package.")
     if (is.null(getOption("email.options", NULL)))
         stop("Please set options(email.options). See ?sendmailR::sendmail_options")
     if (software)
