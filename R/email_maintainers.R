@@ -52,7 +52,7 @@
 
 
 failmail <- function(package, software=TRUE, from=getOption("fromEmail",
-    "Dan Tenenbaum <dtenenba@fredhutch.org>"), sig="Dan",
+    "dtenenba@fredhutch.org"), sig="Dan",
     subject=sprintf("%s build problem", package), preview=TRUE,
     bccme=TRUE)
 {
