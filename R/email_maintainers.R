@@ -53,7 +53,8 @@
 
 failmail <- function(package, software=TRUE, from=getOption("fromEmail",
     "Dan Tenenbaum <dtenenba@fredhutch.org>"), sig="Dan",
-    subject=sprintf("%s build problem", package), preview=TRUE)
+    subject=sprintf("%s build problem", package), preview=TRUE,
+    bccme=TRUE)
 {
     if (is.null(getOption("email.options", NULL)))
         stop("Please set options(email.options). See ?sendmailR::sendmail_options")
@@ -98,7 +99,11 @@ failmail <- function(package, software=TRUE, from=getOption("fromEmail",
         if (!tolower(ans) == "y")
             return(invisible(NULL))
     }
+    bcc <- c()
+    if (bccme)
+        bcc <- from
     sendmail(from, to, subject, msg,
+        bcc = bcc,
         headers=list("X-BiocContributions"="TRUE"),
         control=getOption("email.options"))
     invisible(NULL)
