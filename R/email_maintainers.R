@@ -8,7 +8,7 @@
         repos <- "bioc"
     else
         repos <- "data-experiment"
-    url <- sprintf("http://bioconductor.org/checkResults/devel/%s-LATEST/meat-index.txt", 
+    url <- sprintf("http://master.bioconductor.org/checkResults/devel/%s-LATEST/meat-index.txt", 
         repos)
     txt <- content(GET(url))
     lines <- strsplit(txt, "\n")[[1]]
@@ -33,18 +33,19 @@
     ret <- list()
     for (version in c("release", "devel"))
     {
-        url <- paste0("http://bioconductor.org/checkResults/",
+        url <- paste0("http://master.bioconductor.org/checkResults/",
             version, "/", repos, "-LATEST/STATUS_DB.txt")
         status_txt <- content(GET(url))
         lines <- strsplit(status_txt, "\n")[[1]]
         raw <- lines[grep(paste0("^", package, "#"), lines)]
         j <- unlist(strsplit(raw, " ")) 
-        results <- sort(unique(j[c(rep(FALSE,TRUE), TRUE)]))
+        results <- unique(j[c(rep(FALSE,TRUE), TRUE)])
+        if (length(results))
+            results <- sort(results)
         results <-  results[!grepl("NotNeeded|skipped|OK", results)]
         if (length(results) && !(length(results) == 1 && results == "OK"))
             ret[[version]] <- results
     }
-    #if (all(unlist(lapply(x, function(y) length(y) == 1 && y == "OK"))))
     if(is.null(names(ret)))
         stop("This package has no issues!")
     ret
@@ -78,16 +79,18 @@ failmail <- function(package, software=TRUE, from=getOption("fromEmail",
         }
     }
     custom <- c()
-    cat("Enter a custom message, . on a line by itself to end.\n")
-    while(TRUE)
+    cat("Enter a custom message y/N?")
+    ans <- readLines(n=1)
+    if (tolower(ans) == "y")
     {
-        line <- readLines(n=1)
-        if (line == ".")
-            break
-        custom <- append(custom, line)
+        t <- tempfile(paste(package, "failmail", as.integer(Sys.time()), sep=")"))
+        if (file.exists(t))
+            unlink(t)
+        file.edit(t)
+        if (file.exists(t))
+            msg <- paste0(msg, paste(readLines(t), collapse="\n"), "\n\n")
+
     }
-    if (length(custom))
-        msg <- paste0(msg, paste(custom, collapse="\n"), "\n\n")
 
     msg <- paste0(msg, "Please take a look and fix this as soon as you can.\n")
     msg <- paste0(msg, "Let me know if you have any questions.\n\nThanks,\n", sig, "\n")
