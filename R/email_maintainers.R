@@ -56,7 +56,9 @@
     ret
 }
 
-
+## TODO - add special text (and arg to activate it) 
+## when release date is approaching
+## and error/warning MUST be fixed by some date.
 failmail <- function(package, software=TRUE, from=getOption("fromEmail",
     "dtenenba@fredhutch.org"), sig=getOption("mail.sig", "Dan"),
     subject=sprintf("%s build problem", package), preview=TRUE,
